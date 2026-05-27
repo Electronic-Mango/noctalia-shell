@@ -13,7 +13,6 @@ SmartPanel {
   id: root
 
   preferredWidth: Math.round(440 * Style.uiScaleRatio)
-  preferredHeight: Math.round(420 * Style.uiScaleRatio)
 
   panelContent: Item {
     id: panelContent
@@ -151,8 +150,11 @@ SmartPanel {
     // Note: We need to use link IDs since source/target properties require binding
     readonly property var appStreams: AudioService.appStreams
 
-    // Use implicitHeight from content + margins to avoid binding loops
-    property real contentPreferredHeight: mainColumn.implicitHeight + Style.margin2L
+    readonly property real minContentHeight: Math.round(240 * Style.uiScaleRatio)
+    readonly property real currentTabHeight: currentTabIndex === 0 ? volumeScrollView.implicitHeight : devicesScrollView.implicitHeight
+
+    // Report the active tab height so SmartPanel can resize with the selected tab.
+    property real contentPreferredHeight: Math.max(minContentHeight, mainColumn.spacing + headerBox.implicitHeight + currentTabHeight + Style.margin2L)
 
     ColumnLayout {
       id: mainColumn
@@ -162,6 +164,7 @@ SmartPanel {
 
       // HEADER
       NBox {
+        id: headerBox
         Layout.fillWidth: true
         implicitHeight: header.implicitHeight + Style.margin2M
 
@@ -222,7 +225,7 @@ SmartPanel {
       // Content Stack
       StackLayout {
         Layout.fillWidth: true
-        Layout.fillHeight: true
+        Layout.preferredHeight: panelContent.currentTabHeight
         currentIndex: panelContent.currentTabIndex
 
         // Applications Tab (Volume)
@@ -230,6 +233,7 @@ SmartPanel {
           id: volumeScrollView
           horizontalPolicy: ScrollBar.AlwaysOff
           verticalPolicy: ScrollBar.AsNeeded
+          showScrollbarWhenScrollable: false
           contentWidth: availableWidth
           reserveScrollbarSpace: false
           gradientColor: Color.mSurface
@@ -739,6 +743,7 @@ SmartPanel {
           id: devicesScrollView
           horizontalPolicy: ScrollBar.AlwaysOff
           verticalPolicy: ScrollBar.AsNeeded
+          showScrollbarWhenScrollable: false
           contentWidth: availableWidth
           reserveScrollbarSpace: false
           gradientColor: Color.mSurface
