@@ -1238,4 +1238,16 @@ Singleton {
     }
     Pipewire.preferredDefaultAudioSource = newSource;
   }
+
+  function getStatusText() {
+    const nick = sink?.nickname ?? "";
+    const volumeText = I18n.tr("tooltips.volume-at", {
+                                 "volume": (() => {
+                                              const maxVolume = Settings.data.audio.volumeOverdrive ? 1.5 : 1.0;
+                                              const displayVolume = Math.min(maxVolume, volume);
+                                              return Math.round(displayVolume * 100);
+                                            })()
+                               });
+    return nick ? volumeText + "\n" + nick : volumeText;
+  }
 }

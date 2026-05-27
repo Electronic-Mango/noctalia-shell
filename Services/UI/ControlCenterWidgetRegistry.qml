@@ -18,6 +18,7 @@ Singleton {
                            "NightLight": nightLightComponent,
                            "Notifications": notificationsComponent,
                            "PowerProfile": powerProfileComponent,
+                           "Volume": volumeComponent,
                            "WiFi": networkComponent,
                            "Network": networkComponent,
                            "NoctaliaPerformance": noctaliaPerformanceComponent,
@@ -63,6 +64,9 @@ Singleton {
   }
   property Component powerProfileComponent: Component {
     PowerProfile {}
+  }
+  property Component volumeComponent: Component {
+    Volume {}
   }
   property Component networkComponent: Component {
     Network {}
